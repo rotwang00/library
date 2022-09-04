@@ -1,4 +1,5 @@
 let myLibrary = [];
+let bookCount = 0;
 const cards = document.getElementById('cards');
 
 class Book {
@@ -7,10 +8,13 @@ class Book {
     this.author = author;
     this.pages = pages;
     this.read = read;
+    this.bookNumber = bookCount;
+    bookCount++;
   }
 
   toggleRead() {
     this.read = !this.read;
+    updateDisplay();
   }
 }
 
@@ -29,13 +33,20 @@ function updateDisplay() {
     cards.removeChild(cards.lastChild);
   }
 
-  // Add all books
+  // Add all books to DOM
   for (let book of myLibrary) {
     const newCard = document.createElement('div');
-    const newTitle = document.createElement('h4');
-    const newAuthor = document.createElement('h4');
-    const newPages = document.createElement('h5');
-    const read = document.createElement('h5');
+
+    const newTitle = document.createElement('p');
+    newTitle.classList.add('title');
+    const newAuthor = document.createElement('p');
+    newAuthor.classList.add('author');
+    const newPages = document.createElement('p');
+    newPages.classList.add('pages');
+    const read = document.createElement('p');
+    read.classList.add('read');
+    const readButton = document.createElement('button');
+    readButton.classList.add('readButton');
 
     newTitle.textContent = book.title;
     newAuthor.textContent = book.author;
@@ -43,31 +54,32 @@ function updateDisplay() {
     book.read
       ? (read.textContent = 'Already read')
       : (read.textContent = 'Not read yet');
+    readButton.textContent = 'Read?';
+
+    // Toggle read status
+    readButton.addEventListener('click', function (e) {
+      let index = parseInt(e.path[1].attributes[0].nodeValue);
+      myLibrary[index].toggleRead();
+    });
 
     newCard.appendChild(newTitle);
     newCard.appendChild(newAuthor);
     newCard.appendChild(newPages);
     newCard.appendChild(read);
+    newCard.appendChild(readButton);
+
+    newCard.dataset.index = `${book.bookNumber}`;
 
     newCard.classList.add('card');
 
     cards.appendChild(newCard);
-
-    // <h4>Dune</h4>
-    //     <h4>Herbert</h4>
-    //     <h5>700 pages</h5>
-    //     <h5>Not read</h5>
-    //     <button>Read</button>
-    //     <button>Remove</button>
   }
 }
 
 newBook('Dune', 'Herbert', 700, true);
 newBook('It', 'King', 600, true);
 newBook('Gardens of the Moon', 'Erikson', 1000, false);
+newBook('Count', 'Dumas', 800, true);
 
 console.log(myLibrary);
 updateDisplay();
-
-newBook('Count', 'Dumas', 800, true);
-setTimeout(updateDisplay, 3000);

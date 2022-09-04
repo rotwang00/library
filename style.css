@@ -5,6 +5,7 @@
 
 #cards {
   display: flex;
+  flex-wrap: wrap;
 }
 .card {
   width: 160px;
@@ -14,6 +15,11 @@
   border-radius: 5px;
   padding: 12px;
   background-color: azure;
+  margin: 16px;
+}
+
+.title {
+  color: red;
 }
 
 /* On mouse-over, add a deeper shadow */
